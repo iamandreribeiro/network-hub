@@ -12,12 +12,16 @@ export class IntentionsService {
     });
   }
 
-  findAll() {
-    return `This action returns all intentions`;
+  async findAll() {
+    return await this.prisma.intention.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} intention`;
+  async findOne(id: number) {
+    return await this.prisma.intention.findUnique({
+      where: {
+        id: id,
+      },
+    });
   }
 
   update(id: number, updateIntentionDto: UpdateIntentionDto) {
