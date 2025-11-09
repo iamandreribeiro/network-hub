@@ -1,18 +1,18 @@
 import { IsEmail, IsString, IsNotEmpty } from 'class-validator';
 export class CreateIntentionDto {
-  @IsString();
-  @IsNotEmpty();
+  @IsString()
+  @IsNotEmpty()
   nome: string;
 
-  @IsEmail();
-  @IsNotEmpty();
+  @IsEmail()
+  @IsNotEmpty()
   email: string;
 
-  @IsString();
-  @IsNotEmpty();
+  @IsString()
+  @IsNotEmpty()
   empresa: string;
 
-  @IsString();
-  @IsNotEmpty();
+  @IsString()
+  @IsNotEmpty()
   motivoParticipacao: string;
 }
