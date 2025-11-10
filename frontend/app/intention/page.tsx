@@ -18,15 +18,26 @@ export default function IntentionPage() {
       'motivoParticipacao': motivoParticipacao
     }
 
-    const URL = 'http://localhost:3001/intentions';
+    const URL = process.env.NEXT_PUBLIC_ENDPOINT + 'intentions';
 
     try {
-      const promise = await axios.post(URL, data);
-      console.log(promise.statusText);
+      await axios.post(URL, data);
       alert('Dados enviados com sucesso!');
     } catch (error) {
-      console.log(error.response.statusText);
-      alert('Dados não enviados!');
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message;
+
+        if (status === 409) {
+          alert(`Erro: ${message || 'Email já existente.'}`);
+        } else if (status === 400) {
+          alert(`Erro de validação: ${message}`);
+        } else if (status === 404) {
+          alert('Recurso não encontrado!');
+        }
+
+        console.error('Detalhes do erro:', error.response?.data);
+      }
     }
 
     setNome('');
@@ -36,25 +47,12 @@ export default function IntentionPage() {
   }
 
   return (
-    <div
-      className='bg-neutral-900 p-10 flex flex-col items-center'
-    >
-      <h1>
-        Página de Intenção
-      </h1>
-
-      <div
-        className='bg-neutral-950 p-5 mt-5 rounded-lg'
-      >
+    <div className='bg-neutral-900 p-10 flex flex-col items-center'>
+      <strong> Página de Intenção </strong>
+      <div className='bg-neutral-950 p-5 mt-5 rounded-lg'>
         <form onSubmit={enviaFormulario}>
-          <div
-            className='mb-5'
-          >
-            <h1
-              className='mr-5'
-            >
-              Nome:
-            </h1>
+          <div className='mb-5'>
+            <h1 className='mr-5'>Nome:</h1>
             <input
               className='bg-neutral-900 w-100 border border-black rounded-lg p-1'
               type="text"
@@ -66,14 +64,8 @@ export default function IntentionPage() {
             />
           </div>
 
-          <div
-            className='mb-5'
-          >
-            <h1
-              className='mr-5'
-            >
-              E-mail:
-            </h1>
+          <div className='mb-5'>
+            <h1 className='mr-5'>E-mail:</h1>
             <input
               className='bg-neutral-900 w-100 border border-black rounded-lg p-1'
               type="email"
@@ -85,14 +77,8 @@ export default function IntentionPage() {
             />
           </div>
 
-          <div
-            className='mb-5'
-          >
-            <h1
-              className='mr-5'
-            >
-              Empresa:
-            </h1>
+          <div className='mb-5'>
+            <h1 className='mr-5'>Empresa:</h1>
             <input
               className='bg-neutral-900 w-100 border border-black rounded-lg p-1'
               type="text"
@@ -104,14 +90,8 @@ export default function IntentionPage() {
             />
           </div>
 
-          <div
-            className='mb-5'
-          >
-            <h1
-              className='mr-5'
-            >
-              Motivo de participação:
-            </h1>
+          <div className='mb-5'>
+            <h1 className='mr-5'>Motivo de participação:</h1>
             <textarea
               id="motivo"
               className='bg-neutral-900 w-100 border border-black rounded-lg p-1'
@@ -122,12 +102,7 @@ export default function IntentionPage() {
             />
           </div>
 
-          <button
-            className='w-100 bg-green-950 p-5 rounded-full text-green-500'
-            onClick={enviaFormulario}
-          >
-            Enviar Intenção
-          </button>
+          <button className='w-full bg-green-800 p-2 rounded-full'>Enviar Intenção</button>
         </form>
       </div>
     </div >
