@@ -1,7 +1,6 @@
 const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
-  // Forneça o caminho para o seu projeto Next.js
   dir: './',
 });
 
