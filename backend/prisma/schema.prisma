@@ -20,12 +20,29 @@ enum Status {
 }
 
 model Intention {
-  id                 Int      @id @default(autoincrement())
+  id                 Int          @id @default(autoincrement())
   nome               String
-  email              String   @unique
+  email              String       @unique
   empresa            String
   motivoParticipacao String
-  status             Status   @default(PENDENTE)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  status             Status       @default(PENDENTE)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  invitations        Invitation[]
+}
+
+model Invitation {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  intention   Intention @relation(fields: [idIntention], references: [id])
+  idIntention Int       @unique
+}
+
+model Member {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  hashSenha String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
